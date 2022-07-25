@@ -1,0 +1,18 @@
+library(raster)
+library(sp)
+
+r <- getData("worldclim",var="bio",res=10)
+r_data <- r[[c(1,19)]]
+plot(r_data)
+names(r_data) <- c("Temp","Prec")
+points <- spsample(as(r_data@extent, 'SpatialPolygons'),n=100, type="random") 
+#plot(points,add=TRUE)  # add points in exiting pic
+values <- extract(r_data,points)
+
+df <- cbind.data.frame(coordinates(points),values)
+plot(r_data[[1]])
+plot(points,add=T)
+
+r70<-getData('CMIP5', var='tmin', res=10, rcp=85, model='AC', year=70)
+plot(r70)
+plot(r)
